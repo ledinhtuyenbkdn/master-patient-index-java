@@ -1,6 +1,6 @@
-package com.ledinhtuyenbkdn.masterpersonindex.domain;
+package com.ledinhtuyenbkdn.masterpersonindex.model;
 
-import com.ledinhtuyenbkdn.masterpersonindex.domain.enumeration.Gender;
+import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.Gender;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

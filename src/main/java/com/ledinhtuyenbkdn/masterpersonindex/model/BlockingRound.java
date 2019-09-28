@@ -1,4 +1,4 @@
-package com.ledinhtuyenbkdn.masterpersonindex.domain;
+package com.ledinhtuyenbkdn.masterpersonindex.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,7 +7,7 @@ import javax.persistence.OneToMany;
 import java.util.List;
 
 @Entity
-public class HealthCenter {
+public class BlockingRound {
 
     @Id
     @GeneratedValue
@@ -15,10 +15,8 @@ public class HealthCenter {
 
     private String name;
 
-    private String address;
-
-    @OneToMany(mappedBy = "healthCenter")
-    private List<Person> people;
+    @OneToMany(mappedBy = "blockingRound")
+    private List<BlockingField> blockingFields;
 
     public Long getId() {
         return id;
@@ -36,29 +34,20 @@ public class HealthCenter {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
+    public List<BlockingField> getBlockingFields() {
+        return blockingFields;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public List<Person> getPeople() {
-        return people;
-    }
-
-    public void setPeople(List<Person> people) {
-        this.people = people;
+    public void setBlockingFields(List<BlockingField> blockingFields) {
+        this.blockingFields = blockingFields;
     }
 
     @Override
     public String toString() {
-        return "HealthCenter{" +
+        return "BlockingRound{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", people=" + people +
+                ", blockingFields=" + blockingFields +
                 '}';
     }
 }

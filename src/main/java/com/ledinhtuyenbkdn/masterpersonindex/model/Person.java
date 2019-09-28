@@ -1,7 +1,7 @@
-package com.ledinhtuyenbkdn.masterpersonindex.domain;
+package com.ledinhtuyenbkdn.masterpersonindex.model;
 
-import com.ledinhtuyenbkdn.masterpersonindex.domain.enumeration.Gender;
-import com.ledinhtuyenbkdn.masterpersonindex.domain.enumeration.PersonStatus;
+import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.Gender;
+import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.PersonStatus;
 
 import javax.persistence.*;
 import java.time.LocalDate;

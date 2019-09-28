@@ -1,6 +1,6 @@
-package com.ledinhtuyenbkdn.masterpersonindex.domain;
+package com.ledinhtuyenbkdn.masterpersonindex.model;
 
-import com.ledinhtuyenbkdn.masterpersonindex.domain.enumeration.Algorithm;
+import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.Algorithm;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
