@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -16,6 +18,7 @@ public class MasterPerson {
     @GeneratedValue
     private Long id;
 
+    @NotBlank
     private String fullName;
 
     private String healthInsuranceNumber;
@@ -24,6 +27,7 @@ public class MasterPerson {
 
     private String address;
 
+    @Past
     private LocalDate dateOfBirth;
 
     private Gender gender;

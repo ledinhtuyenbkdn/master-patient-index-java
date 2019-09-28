@@ -4,6 +4,9 @@ import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.Gender;
 import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.PersonStatus;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 
 @Entity
@@ -13,6 +16,7 @@ public class Person {
     @GeneratedValue
     private Long id;
 
+    @NotBlank
     private String fullName;
 
     private String healthInsuranceNumber;
@@ -21,11 +25,13 @@ public class Person {
 
     private String address;
 
+    @Past
     private LocalDate dateOfBirth;
 
     private Gender gender;
 
     @Column(precision = 5, scale = 2)
+    @PositiveOrZero
     private double score;
 
     private PersonStatus personStatus;

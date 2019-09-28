@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -15,8 +17,10 @@ public class MatchingMethod {
     @GeneratedValue
     private Long id;
 
+    @NotBlank
     private String name;
 
+    @NotNull
     private Algorithm algorithm;
 
     @OneToMany(mappedBy = "matchingMethod")

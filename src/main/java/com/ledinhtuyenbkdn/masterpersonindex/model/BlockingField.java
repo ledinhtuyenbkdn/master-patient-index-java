@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class BlockingField {
@@ -14,6 +15,7 @@ public class BlockingField {
     @GeneratedValue
     private Long id;
 
+    @NotNull
     private Field field;
 
     @ManyToOne

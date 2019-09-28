@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @Entity
 public class FieldWeight {
@@ -14,11 +16,14 @@ public class FieldWeight {
     @GeneratedValue
     private Long id;
 
+    @NotNull
     private Field field;
 
     @ManyToOne
     private MatchingMethod matchingMethod;
 
+    @NotNull
+    @PositiveOrZero
     private Integer weight;
 
     public Long getId() {
