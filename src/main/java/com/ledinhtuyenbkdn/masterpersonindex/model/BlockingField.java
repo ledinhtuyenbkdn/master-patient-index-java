@@ -50,7 +50,6 @@ public class BlockingField {
         return "BlockingField{" +
                 "id=" + id +
                 ", field=" + field +
-                ", blockingRound=" + blockingRound +
                 '}';
     }
 }

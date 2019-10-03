@@ -1,9 +1,6 @@
 package com.ledinhtuyenbkdn.masterpersonindex.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
@@ -17,7 +14,7 @@ public class BlockingRound {
     @NotBlank
     private String name;
 
-    @OneToMany(mappedBy = "blockingRound")
+    @OneToMany(mappedBy = "blockingRound", fetch = FetchType.EAGER)
     private List<BlockingField> blockingFields;
 
     public Long getId() {

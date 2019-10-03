@@ -63,7 +63,6 @@ public class FieldWeight {
         return "FieldWeight{" +
                 "id=" + id +
                 ", field=" + field +
-                ", matchingMethod=" + matchingMethod +
                 ", weight=" + weight +
                 '}';
     }
