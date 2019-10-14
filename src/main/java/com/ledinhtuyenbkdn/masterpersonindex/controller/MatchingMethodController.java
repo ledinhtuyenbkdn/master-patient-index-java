@@ -22,7 +22,7 @@ public class MatchingMethodController {
     }
 
     @PostMapping("/matching-methods")
-    public ResponseEntity<MatchingMethod> create(@Valid MatchingMethod matchingMethod) {
+    public ResponseEntity<MatchingMethod> create(@RequestBody @Valid MatchingMethod matchingMethod) {
         if (matchingMethod.getId() != null) {
             throw new BadRequestException("Id must be null.");
         }
@@ -31,11 +31,11 @@ public class MatchingMethodController {
     }
 
     @PutMapping("/matching-methods")
-    public ResponseEntity<MatchingMethod> update(@Valid MatchingMethod matchingMethod) {
+    public ResponseEntity<MatchingMethod> update(@RequestBody @Valid MatchingMethod matchingMethod) {
         if (matchingMethod.getId() == null) {
             throw new BadRequestException("Id must be not null.");
         }
-        matchingMethod = matchingMethodService.save(matchingMethod);
+        matchingMethod = matchingMethodService.update(matchingMethod);
         return ResponseEntity.ok(matchingMethod);
     }
 

@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class Person {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
@@ -120,6 +120,14 @@ public class Person {
 
     public void setMasterPerson(MasterPerson masterPerson) {
         this.masterPerson = masterPerson;
+    }
+
+    public double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
     }
 
     @Override

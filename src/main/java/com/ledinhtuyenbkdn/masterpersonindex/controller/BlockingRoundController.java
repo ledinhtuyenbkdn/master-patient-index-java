@@ -22,7 +22,7 @@ public class BlockingRoundController {
     }
 
     @PostMapping("/blocking-rounds")
-    public ResponseEntity<BlockingRound> create(@Valid BlockingRound blockingRound) {
+    public ResponseEntity<BlockingRound> create(@RequestBody @Valid BlockingRound blockingRound) {
         if (blockingRound.getId() != null) {
             throw new BadRequestException("Id must be null.");
         }
@@ -31,11 +31,11 @@ public class BlockingRoundController {
     }
 
     @PutMapping("/blocking-rounds")
-    public ResponseEntity<BlockingRound> update(@Valid BlockingRound blockingRound) {
+    public ResponseEntity<BlockingRound> update(@RequestBody @Valid BlockingRound blockingRound) {
         if (blockingRound.getId() == null) {
             throw new BadRequestException("Id must be not null.");
         }
-        blockingRound = blockingRoundService.save(blockingRound);
+        blockingRound = blockingRoundService.update(blockingRound);
         return ResponseEntity.ok(blockingRound);
     }
 

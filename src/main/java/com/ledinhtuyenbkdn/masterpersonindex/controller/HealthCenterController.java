@@ -22,7 +22,7 @@ public class HealthCenterController {
     }
 
     @PostMapping("/health-centers")
-    public ResponseEntity<HealthCenter> create(@Valid HealthCenter healthCenter) {
+    public ResponseEntity<HealthCenter> create(@RequestBody @Valid HealthCenter healthCenter) {
         if (healthCenter.getId() != null) {
             throw new BadRequestException("Id must be null.");
         }
@@ -31,7 +31,7 @@ public class HealthCenterController {
     }
 
     @PutMapping("/health-centers")
-    public ResponseEntity<HealthCenter> update(@Valid HealthCenter healthCenter) {
+    public ResponseEntity<HealthCenter> update(@RequestBody @Valid HealthCenter healthCenter) {
         if (healthCenter.getId() == null) {
             throw new BadRequestException("Id must be not null.");
         }

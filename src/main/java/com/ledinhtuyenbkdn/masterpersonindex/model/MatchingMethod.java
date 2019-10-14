@@ -2,10 +2,7 @@ package com.ledinhtuyenbkdn.masterpersonindex.model;
 
 import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.Algorithm;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -14,7 +11,7 @@ import java.util.List;
 public class MatchingMethod {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank

@@ -9,6 +9,8 @@ public interface BlockingRoundService {
 
     BlockingRound save(BlockingRound blockingRound);
 
+    BlockingRound update(BlockingRound blockingRound);
+
     Optional<BlockingRound> findOne(Long id);
 
     List<BlockingRound> findAll();

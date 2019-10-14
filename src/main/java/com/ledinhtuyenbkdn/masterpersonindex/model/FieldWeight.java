@@ -1,11 +1,9 @@
 package com.ledinhtuyenbkdn.masterpersonindex.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.Field;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
@@ -13,13 +11,14 @@ import javax.validation.constraints.PositiveOrZero;
 public class FieldWeight {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
     private Field field;
 
     @ManyToOne
+    @JsonIgnore
     private MatchingMethod matchingMethod;
 
     @NotNull

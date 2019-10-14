@@ -9,6 +9,8 @@ public interface MatchingMethodService {
 
     MatchingMethod save(MatchingMethod matchingMethod);
 
+    MatchingMethod update(MatchingMethod matchingMethod);
+
     Optional<MatchingMethod> findOne(Long id);
 
     List<MatchingMethod> findAll();

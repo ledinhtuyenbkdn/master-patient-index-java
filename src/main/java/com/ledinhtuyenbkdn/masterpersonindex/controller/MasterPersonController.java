@@ -22,7 +22,7 @@ public class MasterPersonController {
     }
 
     @PostMapping("/master-persons")
-    public ResponseEntity<MasterPerson> create(@Valid MasterPerson masterPerson) {
+    public ResponseEntity<MasterPerson> create(@RequestBody @Valid MasterPerson masterPerson) {
         if (masterPerson.getId() != null) {
             throw new BadRequestException("Id must be null.");
         }
@@ -31,7 +31,7 @@ public class MasterPersonController {
     }
 
     @PutMapping("/master-persons")
-    public ResponseEntity<MasterPerson> update(@Valid MasterPerson masterPerson) {
+    public ResponseEntity<MasterPerson> update(@RequestBody @Valid MasterPerson masterPerson) {
         if (masterPerson.getId() == null) {
             throw new BadRequestException("Id must be not null.");
         }
