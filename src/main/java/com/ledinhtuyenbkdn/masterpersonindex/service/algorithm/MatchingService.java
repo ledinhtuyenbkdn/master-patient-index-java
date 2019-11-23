@@ -1,8 +1,8 @@
 package com.ledinhtuyenbkdn.masterpersonindex.service.algorithm;
 
-import com.ledinhtuyenbkdn.masterpersonindex.model.Person;
+import com.ledinhtuyenbkdn.masterpersonindex.service.dto.PersonDTO;
 
 public interface MatchingService {
 
-    void match(Person person);
+    void match(PersonDTO person);
 }

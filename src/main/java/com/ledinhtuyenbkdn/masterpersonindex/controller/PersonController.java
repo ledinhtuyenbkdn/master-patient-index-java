@@ -1,9 +1,9 @@
 package com.ledinhtuyenbkdn.masterpersonindex.controller;
 
 import com.ledinhtuyenbkdn.masterpersonindex.exception.BadRequestException;
-import com.ledinhtuyenbkdn.masterpersonindex.model.Person;
 import com.ledinhtuyenbkdn.masterpersonindex.service.PersonService;
 import com.ledinhtuyenbkdn.masterpersonindex.service.algorithm.MatchingService;
+import com.ledinhtuyenbkdn.masterpersonindex.service.dto.PersonDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,17 +26,18 @@ public class PersonController {
     }
 
     @PostMapping("/persons")
-    public ResponseEntity<Person> create(@RequestBody @Valid Person person) {
+    public ResponseEntity<PersonDTO> create(@RequestBody @Valid PersonDTO person) {
         if (person.getId() != null) {
             throw new BadRequestException("Id must be null.");
         }
         person = personService.save(person);
+
         matchingService.match(person);
-        return ResponseEntity.status(HttpStatus.CREATED).body(person);
+        return ResponseEntity.status(HttpStatus.CREATED).body(personService.findOne(person.getId()).get());
     }
 
     @PutMapping("/persons")
-    public ResponseEntity<Person> update(@RequestBody @Valid Person person) {
+    public ResponseEntity<PersonDTO> update(@RequestBody @Valid PersonDTO person) {
         if (person.getId() == null) {
             throw new BadRequestException("Id must be not null.");
         }
@@ -45,8 +46,8 @@ public class PersonController {
     }
 
     @GetMapping("/persons/{id}")
-    public ResponseEntity<Person> findById(@PathVariable("id") Long id) {
-        Optional<Person> optionalPerson = personService.findOne(id);
+    public ResponseEntity<PersonDTO> findById(@PathVariable("id") Long id) {
+        Optional<PersonDTO> optionalPerson = personService.findOne(id);
         if (!optionalPerson.isPresent()) {
             throw new BadRequestException("Not found.");
         }
@@ -54,7 +55,7 @@ public class PersonController {
     }
 
     @GetMapping("/persons")
-    public ResponseEntity<List<Person>> findAll() {
+    public ResponseEntity<List<PersonDTO>> findAll() {
         return ResponseEntity.ok(personService.findAll());
     }
 

@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BlockingImpl implements BlockingService {
+public class BlockingServiceImpl implements BlockingService {
 
     private MasterPersonRepository masterPersonRepository;
 
     private BlockingRoundRepository blockingRoundRepository;
 
-    public BlockingImpl(MasterPersonRepository masterPersonRepository, BlockingRoundRepository blockingRoundRepository) {
+    public BlockingServiceImpl(MasterPersonRepository masterPersonRepository, BlockingRoundRepository blockingRoundRepository) {
         this.masterPersonRepository = masterPersonRepository;
         this.blockingRoundRepository = blockingRoundRepository;
     }

@@ -20,7 +20,7 @@ public class MatchingMethod {
     @NotNull
     private Algorithm algorithm;
 
-    @OneToMany(mappedBy = "matchingMethod")
+    @OneToMany(mappedBy = "matchingMethod", fetch = FetchType.EAGER)
     private List<FieldWeight> fieldWeights;
 
     public Long getId() {

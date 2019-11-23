@@ -1,19 +1,14 @@
-package com.ledinhtuyenbkdn.masterpersonindex.model;
+package com.ledinhtuyenbkdn.masterpersonindex.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.Gender;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
-public class MasterPerson {
+public class MasterPersonDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
@@ -30,9 +25,7 @@ public class MasterPerson {
 
     private Gender gender;
 
-    @OneToMany(mappedBy = "masterPerson")
-    @JsonIgnore
-    private List<Person> people;
+    private List<PersonDTO> people;
 
     public Long getId() {
         return id;
@@ -90,25 +83,11 @@ public class MasterPerson {
         this.gender = gender;
     }
 
-    public List<Person> getPeople() {
+    public List<PersonDTO> getPeople() {
         return people;
     }
 
-    public void setPeople(List<Person> people) {
+    public void setPeople(List<PersonDTO> people) {
         this.people = people;
-    }
-
-    @Override
-    public String toString() {
-        return "MasterPerson{" +
-                "id=" + id +
-                ", fullName='" + fullName + '\'' +
-                ", healthInsuranceNumber='" + healthInsuranceNumber + '\'' +
-                ", identificationNumber='" + identificationNumber + '\'' +
-                ", address='" + address + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
-                ", gender=" + gender +
-                ", people=" + people +
-                '}';
     }
 }

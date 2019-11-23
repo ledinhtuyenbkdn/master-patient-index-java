@@ -13,13 +13,13 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class MatchingMethodImpl implements MatchingMethodService {
+public class MatchingMethodServiceImpl implements MatchingMethodService {
 
     private MatchingMethodRepository matchingMethodRepository;
 
     private FieldWeightRepository fieldWeightRepository;
 
-    public MatchingMethodImpl(MatchingMethodRepository matchingMethodRepository, FieldWeightRepository fieldWeightRepository) {
+    public MatchingMethodServiceImpl(MatchingMethodRepository matchingMethodRepository, FieldWeightRepository fieldWeightRepository) {
         this.matchingMethodRepository = matchingMethodRepository;
         this.fieldWeightRepository = fieldWeightRepository;
     }

@@ -11,11 +11,11 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class HealthCenterImpl implements HealthCenterService {
+public class HealthCenterServiceImpl implements HealthCenterService {
 
     private HealthCenterRepository healthCenterRepository;
 
-    public HealthCenterImpl(HealthCenterRepository healthCenterRepository) {
+    public HealthCenterServiceImpl(HealthCenterRepository healthCenterRepository) {
         this.healthCenterRepository = healthCenterRepository;
     }
 

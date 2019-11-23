@@ -8,6 +8,8 @@ import com.ledinhtuyenbkdn.masterpersonindex.repository.MasterPersonRepository;
 import com.ledinhtuyenbkdn.masterpersonindex.repository.MatchingMethodRepository;
 import com.ledinhtuyenbkdn.masterpersonindex.repository.PersonRepository;
 import com.ledinhtuyenbkdn.masterpersonindex.repository.ReviewLinkRepository;
+import com.ledinhtuyenbkdn.masterpersonindex.service.dto.PersonDTO;
+import com.ledinhtuyenbkdn.masterpersonindex.service.mapper.PersonMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class MatchingImpl implements MatchingService {
+public class MatchingServiceImpl implements MatchingService {
 
     private static final int MANUAL = 60;
 
@@ -33,16 +35,21 @@ public class MatchingImpl implements MatchingService {
 
     private ReviewLinkRepository reviewLinkRepository;
 
-    public MatchingImpl(BlockingService blockingService, MatchingMethodRepository matchingMethodRepository, PersonRepository personRepository, MasterPersonRepository masterPersonRepository, ReviewLinkRepository reviewLinkRepository) {
+    private PersonMapper personMapper;
+
+    public MatchingServiceImpl(BlockingService blockingService, MatchingMethodRepository matchingMethodRepository, PersonRepository personRepository, MasterPersonRepository masterPersonRepository, ReviewLinkRepository reviewLinkRepository, PersonMapper personMapper) {
         this.blockingService = blockingService;
         this.matchingMethodRepository = matchingMethodRepository;
         this.personRepository = personRepository;
         this.masterPersonRepository = masterPersonRepository;
         this.reviewLinkRepository = reviewLinkRepository;
+        this.personMapper = personMapper;
     }
 
     @Override
-    public void match(Person person) {
+    public void match(PersonDTO personDTO) {
+        Person person = personMapper.toEntity(personDTO);
+
         AlgorithmInterface algorithm = AlgorithmFactory.getAlgorithm(AlgorithmFactory.FUZZY_SEARCH);
         Optional<MatchingMethod> optionalMatchingMethod = matchingMethodRepository.findById(MATCHING_METHOD);
 
@@ -112,7 +119,7 @@ public class MatchingImpl implements MatchingService {
 
         person.setMasterPerson(masterPerson);
         person.setPersonStatus(PersonStatus.NEW_MASTER_PERSON);
-        person.setScore(100);
+        person.setScore(100.0);
         personRepository.save(person);
     }
 
@@ -140,6 +147,6 @@ public class MatchingImpl implements MatchingService {
             totalScore += score * weight;
         }
 
-        return totalScore;
+        return totalScore / 100;
     }
 }

@@ -13,13 +13,13 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class BlockingRoundImpl implements BlockingRoundService {
+public class BlockingRoundServiceImpl implements BlockingRoundService {
 
     private BlockingRoundRepository blockingRoundRepository;
 
     private BlockingFieldRepository blockingFieldRepository;
 
-    public BlockingRoundImpl(BlockingRoundRepository blockingRoundRepository, BlockingFieldRepository blockingFieldRepository) {
+    public BlockingRoundServiceImpl(BlockingRoundRepository blockingRoundRepository, BlockingFieldRepository blockingFieldRepository) {
         this.blockingRoundRepository = blockingRoundRepository;
         this.blockingFieldRepository = blockingFieldRepository;
     }

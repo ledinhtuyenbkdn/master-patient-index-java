@@ -1,17 +1,17 @@
 package com.ledinhtuyenbkdn.masterpersonindex.service;
 
-import com.ledinhtuyenbkdn.masterpersonindex.model.MasterPerson;
+import com.ledinhtuyenbkdn.masterpersonindex.service.dto.MasterPersonDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface MasterPersonService {
 
-    MasterPerson save(MasterPerson masterPerson);
+    MasterPersonDTO save(MasterPersonDTO masterPersonDTO);
 
-    Optional<MasterPerson> findOne(Long id);
+    Optional<MasterPersonDTO> findOne(Long id);
 
-    List<MasterPerson> findAll();
+    List<MasterPersonDTO> findAll();
 
     void delete(Long id);
 }

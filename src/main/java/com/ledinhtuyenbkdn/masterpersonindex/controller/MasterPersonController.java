@@ -1,8 +1,8 @@
 package com.ledinhtuyenbkdn.masterpersonindex.controller;
 
 import com.ledinhtuyenbkdn.masterpersonindex.exception.BadRequestException;
-import com.ledinhtuyenbkdn.masterpersonindex.model.MasterPerson;
 import com.ledinhtuyenbkdn.masterpersonindex.service.MasterPersonService;
+import com.ledinhtuyenbkdn.masterpersonindex.service.dto.MasterPersonDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +21,8 @@ public class MasterPersonController {
         this.masterPersonService = masterPersonService;
     }
 
-    @PostMapping("/master-persons")
-    public ResponseEntity<MasterPerson> create(@RequestBody @Valid MasterPerson masterPerson) {
+    //    @PostMapping("/master-persons")
+    public ResponseEntity<MasterPersonDTO> create(@RequestBody @Valid MasterPersonDTO masterPerson) {
         if (masterPerson.getId() != null) {
             throw new BadRequestException("Id must be null.");
         }
@@ -30,8 +30,8 @@ public class MasterPersonController {
         return ResponseEntity.status(HttpStatus.CREATED).body(masterPerson);
     }
 
-    @PutMapping("/master-persons")
-    public ResponseEntity<MasterPerson> update(@RequestBody @Valid MasterPerson masterPerson) {
+    //    @PutMapping("/master-persons")
+    public ResponseEntity<MasterPersonDTO> update(@RequestBody @Valid MasterPersonDTO masterPerson) {
         if (masterPerson.getId() == null) {
             throw new BadRequestException("Id must be not null.");
         }
@@ -40,8 +40,8 @@ public class MasterPersonController {
     }
 
     @GetMapping("/master-persons/{id}")
-    public ResponseEntity<MasterPerson> findById(@PathVariable("id") Long id) {
-        Optional<MasterPerson> optionalMasterPerson = masterPersonService.findOne(id);
+    public ResponseEntity<MasterPersonDTO> findById(@PathVariable("id") Long id) {
+        Optional<MasterPersonDTO> optionalMasterPerson = masterPersonService.findOne(id);
         if (!optionalMasterPerson.isPresent()) {
             throw new BadRequestException("Not found.");
         }
@@ -49,11 +49,11 @@ public class MasterPersonController {
     }
 
     @GetMapping("/master-persons")
-    public ResponseEntity<List<MasterPerson>> findAll() {
+    public ResponseEntity<List<MasterPersonDTO>> findAll() {
         return ResponseEntity.ok(masterPersonService.findAll());
     }
 
-    @DeleteMapping("/master-persons/{id}")
+    //    @DeleteMapping("/master-persons/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         masterPersonService.delete(id);
         return ResponseEntity.ok().build();

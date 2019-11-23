@@ -1,5 +1,7 @@
 package com.ledinhtuyenbkdn.masterpersonindex.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -17,7 +19,12 @@ public class HealthCenter {
     private String address;
 
     @OneToMany(mappedBy = "healthCenter")
+    @JsonIgnore
     private List<Person> people;
+
+    @OneToMany(mappedBy = "healthCenter")
+    @JsonIgnore
+    private List<User> users;
 
     public Long getId() {
         return id;
@@ -49,6 +56,14 @@ public class HealthCenter {
 
     public void setPeople(List<Person> people) {
         this.people = people;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     @Override

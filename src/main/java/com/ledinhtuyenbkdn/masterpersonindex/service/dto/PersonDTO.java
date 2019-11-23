@@ -1,20 +1,19 @@
-package com.ledinhtuyenbkdn.masterpersonindex.model;
+package com.ledinhtuyenbkdn.masterpersonindex.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.Gender;
+import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.PersonStatus;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
-import java.util.List;
 
-@Entity
-public class MasterPerson {
+public class PersonDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank
+    private String patientCode;
 
     @NotBlank
     private String fullName;
@@ -30,9 +29,14 @@ public class MasterPerson {
 
     private Gender gender;
 
-    @OneToMany(mappedBy = "masterPerson")
-    @JsonIgnore
-    private List<Person> people;
+    @PositiveOrZero
+    private Double score;
+
+    private PersonStatus personStatus;
+
+    private HealthCenterDTO healthCenter;
+
+    private Long masterPersonId;
 
     public Long getId() {
         return id;
@@ -40,6 +44,14 @@ public class MasterPerson {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getPatientCode() {
+        return patientCode;
+    }
+
+    public void setPatientCode(String patientCode) {
+        this.patientCode = patientCode;
     }
 
     public String getFullName() {
@@ -90,25 +102,35 @@ public class MasterPerson {
         this.gender = gender;
     }
 
-    public List<Person> getPeople() {
-        return people;
+    public Double getScore() {
+        return score;
     }
 
-    public void setPeople(List<Person> people) {
-        this.people = people;
+    public void setScore(Double score) {
+        this.score = score;
     }
 
-    @Override
-    public String toString() {
-        return "MasterPerson{" +
-                "id=" + id +
-                ", fullName='" + fullName + '\'' +
-                ", healthInsuranceNumber='" + healthInsuranceNumber + '\'' +
-                ", identificationNumber='" + identificationNumber + '\'' +
-                ", address='" + address + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
-                ", gender=" + gender +
-                ", people=" + people +
-                '}';
+    public PersonStatus getPersonStatus() {
+        return personStatus;
+    }
+
+    public void setPersonStatus(PersonStatus personStatus) {
+        this.personStatus = personStatus;
+    }
+
+    public HealthCenterDTO getHealthCenter() {
+        return healthCenter;
+    }
+
+    public void setHealthCenter(HealthCenterDTO healthCenter) {
+        this.healthCenter = healthCenter;
+    }
+
+    public Long getMasterPersonId() {
+        return masterPersonId;
+    }
+
+    public void setMasterPersonId(Long masterPersonId) {
+        this.masterPersonId = masterPersonId;
     }
 }

@@ -17,6 +17,9 @@ public class Person {
     private Long id;
 
     @NotBlank
+    private String patientCode;
+
+    @NotBlank
     private String fullName;
 
     private String healthInsuranceNumber;
@@ -32,7 +35,7 @@ public class Person {
 
     @Column(precision = 5, scale = 2)
     @PositiveOrZero
-    private double score;
+    private Double score;
 
     private PersonStatus personStatus;
 
@@ -122,24 +125,34 @@ public class Person {
         this.masterPerson = masterPerson;
     }
 
-    public double getScore() {
+    public Double getScore() {
         return score;
     }
 
-    public void setScore(double score) {
+    public void setScore(Double score) {
         this.score = score;
+    }
+
+    public String getPatientCode() {
+        return patientCode;
+    }
+
+    public void setPatientCode(String patientCode) {
+        this.patientCode = patientCode;
     }
 
     @Override
     public String toString() {
         return "Person{" +
                 "id=" + id +
+                ", patientCode='" + patientCode + '\'' +
                 ", fullName='" + fullName + '\'' +
                 ", healthInsuranceNumber='" + healthInsuranceNumber + '\'' +
                 ", identificationNumber='" + identificationNumber + '\'' +
                 ", address='" + address + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", gender=" + gender +
+                ", score=" + score +
                 ", personStatus=" + personStatus +
                 ", healthCenter=" + healthCenter +
                 ", masterPerson=" + masterPerson +
