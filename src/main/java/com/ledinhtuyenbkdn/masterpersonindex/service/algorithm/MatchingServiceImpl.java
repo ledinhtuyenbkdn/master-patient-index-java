@@ -1,11 +1,14 @@
 package com.ledinhtuyenbkdn.masterpersonindex.service.algorithm;
 
-import com.ledinhtuyenbkdn.masterpersonindex.model.*;
+import com.ledinhtuyenbkdn.masterpersonindex.model.FieldWeight;
+import com.ledinhtuyenbkdn.masterpersonindex.model.MasterPerson;
+import com.ledinhtuyenbkdn.masterpersonindex.model.Person;
+import com.ledinhtuyenbkdn.masterpersonindex.model.ReviewLink;
 import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.Field;
 import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.LinkStatus;
 import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.PersonStatus;
+import com.ledinhtuyenbkdn.masterpersonindex.repository.FieldWeightRepository;
 import com.ledinhtuyenbkdn.masterpersonindex.repository.MasterPersonRepository;
-import com.ledinhtuyenbkdn.masterpersonindex.repository.MatchingMethodRepository;
 import com.ledinhtuyenbkdn.masterpersonindex.repository.PersonRepository;
 import com.ledinhtuyenbkdn.masterpersonindex.repository.ReviewLinkRepository;
 import com.ledinhtuyenbkdn.masterpersonindex.service.dto.PersonDTO;
@@ -14,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MatchingServiceImpl implements MatchingService {
@@ -23,11 +25,9 @@ public class MatchingServiceImpl implements MatchingService {
 
     private static final int AUTO = 80;
 
-    private static final Long MATCHING_METHOD = 1L;
-
     private BlockingService blockingService;
 
-    private MatchingMethodRepository matchingMethodRepository;
+    private FieldWeightRepository fieldWeightRepository;
 
     private PersonRepository personRepository;
 
@@ -37,9 +37,9 @@ public class MatchingServiceImpl implements MatchingService {
 
     private PersonMapper personMapper;
 
-    public MatchingServiceImpl(BlockingService blockingService, MatchingMethodRepository matchingMethodRepository, PersonRepository personRepository, MasterPersonRepository masterPersonRepository, ReviewLinkRepository reviewLinkRepository, PersonMapper personMapper) {
+    public MatchingServiceImpl(BlockingService blockingService, FieldWeightRepository fieldWeightRepository, PersonRepository personRepository, MasterPersonRepository masterPersonRepository, ReviewLinkRepository reviewLinkRepository, PersonMapper personMapper) {
         this.blockingService = blockingService;
-        this.matchingMethodRepository = matchingMethodRepository;
+        this.fieldWeightRepository = fieldWeightRepository;
         this.personRepository = personRepository;
         this.masterPersonRepository = masterPersonRepository;
         this.reviewLinkRepository = reviewLinkRepository;
@@ -51,18 +51,14 @@ public class MatchingServiceImpl implements MatchingService {
         Person person = personMapper.toEntity(personDTO);
 
         AlgorithmInterface algorithm = AlgorithmFactory.getAlgorithm(AlgorithmFactory.FUZZY_SEARCH);
-        Optional<MatchingMethod> optionalMatchingMethod = matchingMethodRepository.findById(MATCHING_METHOD);
+        List<FieldWeight> fieldWeights = fieldWeightRepository.findAll();
 
         List<MasterPerson> candidates = blockingService.getCandidates(person);
         List<MasterPerson> possibleMatchMasterPerson = new ArrayList<>();
         List<Double> possibleMatchScore = new ArrayList<>();
 
-        if (!optionalMatchingMethod.isPresent()) {
-            throw new RuntimeException("Matching method does not exist.");
-        }
-
         for (MasterPerson masterPerson : candidates) {
-            double score = calculateScore(person, masterPerson, algorithm, optionalMatchingMethod.get());
+            double score = calculateScore(person, masterPerson, algorithm, fieldWeights);
             if (score > MANUAL) {
                 possibleMatchMasterPerson.add(masterPerson);
                 possibleMatchScore.add(score);
@@ -123,10 +119,10 @@ public class MatchingServiceImpl implements MatchingService {
         personRepository.save(person);
     }
 
-    private double calculateScore(Person person, MasterPerson masterPerson, AlgorithmInterface algorithm, MatchingMethod matchingMethod) {
+    private double calculateScore(Person person, MasterPerson masterPerson, AlgorithmInterface algorithm, List<FieldWeight> fieldWeights) {
         double totalScore = 0;
 
-        for (FieldWeight fieldWeight : matchingMethod.getFieldWeights()) {
+        for (FieldWeight fieldWeight : fieldWeights) {
             Field field = fieldWeight.getField();
             int weight = fieldWeight.getWeight();
             double score = 0;

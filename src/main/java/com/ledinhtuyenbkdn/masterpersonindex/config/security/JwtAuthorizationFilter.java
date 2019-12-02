@@ -2,7 +2,6 @@ package com.ledinhtuyenbkdn.masterpersonindex.config.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,7 +38,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private Authentication getAuthentication(HttpServletRequest request) {
         String authorizationHeader = request.getHeader(SecurityConstants.AUTHORIZATION_HEADER);
-        String accessToken = authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, "");
+        String accessToken = authorizationHeader == null ? "" : authorizationHeader.replace(SecurityConstants.TOKEN_PREFIX, "");
         Key key = Keys.hmacShaKeyFor(SecurityConstants.SECRET_KEY.getBytes());
 
         try {
@@ -49,7 +48,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             List<GrantedAuthority> role = ((List<String>) claimsJws.getBody().get("role")).stream().map(authority -> new SimpleGrantedAuthority(authority)).collect(Collectors.toList());
 
             return new UsernamePasswordAuthenticationToken(userName, null, role);
-        } catch (JwtException exception) {
+        } catch (Exception exception) {
             System.out.println("Jwt is not validate");
         }
         return null;

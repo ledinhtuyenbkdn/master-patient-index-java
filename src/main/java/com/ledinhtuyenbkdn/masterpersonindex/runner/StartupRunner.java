@@ -1,18 +1,17 @@
 package com.ledinhtuyenbkdn.masterpersonindex.runner;
 
+import com.ledinhtuyenbkdn.masterpersonindex.service.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class StartupRunner implements CommandLineRunner {
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private SettingService settingService;
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println(passwordEncoder.encode("secret"));
+        System.out.println(settingService.getSettingValue("ALGORITHM", Long.class));
     }
 }
