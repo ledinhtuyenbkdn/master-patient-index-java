@@ -1,5 +1,6 @@
 package com.ledinhtuyenbkdn.masterpersonindex.service.dto;
 
+import com.ledinhtuyenbkdn.masterpersonindex.model.Province;
 import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.Gender;
 import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.PersonStatus;
 
@@ -35,6 +36,8 @@ public class PersonDTO {
     private PersonStatus personStatus;
 
     private HealthCenterDTO healthCenter;
+
+    private Province province;
 
     private Long masterPersonId;
 
@@ -132,5 +135,13 @@ public class PersonDTO {
 
     public void setMasterPersonId(Long masterPersonId) {
         this.masterPersonId = masterPersonId;
+    }
+
+    public Province getProvince() {
+        return province;
+    }
+
+    public void setProvince(Province province) {
+        this.province = province;
     }
 }

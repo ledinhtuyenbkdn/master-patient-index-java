@@ -5,6 +5,7 @@ import com.ledinhtuyenbkdn.masterpersonindex.model.User;
 import com.ledinhtuyenbkdn.masterpersonindex.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,6 +23,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> create(@RequestBody @Valid User user) {
         if (user.getId() != null) {
             throw new BadRequestException("Id must be null.");
@@ -40,6 +42,7 @@ public class UserController {
 //    }
 
     @GetMapping("/users/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> findById(@PathVariable("id") Long id) {
         Optional<User> userOptional = userService.findOne(id);
         if (!userOptional.isPresent()) {
@@ -49,11 +52,13 @@ public class UserController {
     }
 
     @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> findAll() {
         return ResponseEntity.ok(userService.findAll());
     }
 
     @DeleteMapping("/users/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         userService.delete(id);
         return ResponseEntity.ok().build();

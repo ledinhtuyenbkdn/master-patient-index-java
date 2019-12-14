@@ -5,6 +5,7 @@ import com.ledinhtuyenbkdn.masterpersonindex.model.BlockingRound;
 import com.ledinhtuyenbkdn.masterpersonindex.service.BlockingRoundService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,6 +23,7 @@ public class BlockingRoundController {
     }
 
     @PostMapping("/blocking-rounds")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BlockingRound> create(@RequestBody @Valid BlockingRound blockingRound) {
         if (blockingRound.getId() != null) {
             throw new BadRequestException("Id must be null.");
@@ -31,6 +33,7 @@ public class BlockingRoundController {
     }
 
     @PutMapping("/blocking-rounds")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BlockingRound> update(@RequestBody @Valid BlockingRound blockingRound) {
         if (blockingRound.getId() == null) {
             throw new BadRequestException("Id must be not null.");
@@ -40,6 +43,7 @@ public class BlockingRoundController {
     }
 
     @GetMapping("/blocking-rounds/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BlockingRound> findById(@PathVariable("id") Long id) {
         Optional<BlockingRound> optionalBlockingRound = blockingRoundService.findOne(id);
         if (!optionalBlockingRound.isPresent()) {
@@ -49,11 +53,13 @@ public class BlockingRoundController {
     }
 
     @GetMapping("/blocking-rounds")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<BlockingRound>> findAll() {
         return ResponseEntity.ok(blockingRoundService.findAll());
     }
 
     @DeleteMapping("/blocking-rounds/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         blockingRoundService.delete(id);
         return ResponseEntity.ok().build();

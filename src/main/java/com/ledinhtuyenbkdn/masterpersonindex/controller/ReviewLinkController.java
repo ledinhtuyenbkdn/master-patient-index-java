@@ -4,6 +4,7 @@ import com.ledinhtuyenbkdn.masterpersonindex.exception.BadRequestException;
 import com.ledinhtuyenbkdn.masterpersonindex.model.ReviewLink;
 import com.ledinhtuyenbkdn.masterpersonindex.service.ReviewLinkService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class ReviewLinkController {
     }
 
     @GetMapping("/review-links/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<ReviewLink> findById(@PathVariable("id") Long id) {
         Optional<ReviewLink> reviewLinkOptional = reviewLinkService.findOne(id);
         if (!reviewLinkOptional.isPresent()) {
@@ -29,17 +31,20 @@ public class ReviewLinkController {
     }
 
     @GetMapping("/review-links")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<ReviewLink>> findAll() {
         return ResponseEntity.ok(reviewLinkService.findAll());
     }
 
     @PostMapping("/review-links/{id}/match")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Void> matchPersonToMasterPerson(@PathVariable("id") Long id) {
         reviewLinkService.matchPersonToMasterPerson(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/review-links/{id}/reject")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Void> rejectLinkPersonToMasterPerson(@PathVariable("id") Long id) {
         reviewLinkService.rejectLinkPersonToMasterPerson(id);
         return ResponseEntity.noContent().build();

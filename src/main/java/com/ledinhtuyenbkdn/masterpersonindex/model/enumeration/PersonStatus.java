@@ -5,5 +5,6 @@ public enum PersonStatus {
     NEW_MASTER_PERSON,
     NEED_REVIEW,
     MANUAL_MATCH,
-    AUTO_MATCH
+    AUTO_MATCH,
+    FAST_MATCH
 }

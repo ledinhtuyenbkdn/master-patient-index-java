@@ -5,11 +5,13 @@ import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.PersonStatus;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"patientCode", "health_center_id"})})
 public class Person {
 
     @Id
@@ -44,6 +46,10 @@ public class Person {
 
     @ManyToOne
     private MasterPerson masterPerson;
+
+    @ManyToOne
+    @NotNull
+    private Province province;
 
     public Long getId() {
         return id;
@@ -139,6 +145,14 @@ public class Person {
 
     public void setPatientCode(String patientCode) {
         this.patientCode = patientCode;
+    }
+
+    public Province getProvince() {
+        return province;
+    }
+
+    public void setProvince(Province province) {
+        this.province = province;
     }
 
     @Override

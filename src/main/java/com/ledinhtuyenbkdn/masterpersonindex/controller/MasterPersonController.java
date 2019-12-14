@@ -5,6 +5,7 @@ import com.ledinhtuyenbkdn.masterpersonindex.service.MasterPersonService;
 import com.ledinhtuyenbkdn.masterpersonindex.service.dto.MasterPersonDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -40,6 +41,7 @@ public class MasterPersonController {
     }
 
     @GetMapping("/master-persons/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<MasterPersonDTO> findById(@PathVariable("id") Long id) {
         Optional<MasterPersonDTO> optionalMasterPerson = masterPersonService.findOne(id);
         if (!optionalMasterPerson.isPresent()) {
@@ -49,6 +51,7 @@ public class MasterPersonController {
     }
 
     @GetMapping("/master-persons")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<MasterPersonDTO>> findAll() {
         return ResponseEntity.ok(masterPersonService.findAll());
     }

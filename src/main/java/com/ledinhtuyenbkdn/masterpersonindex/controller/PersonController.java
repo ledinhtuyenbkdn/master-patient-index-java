@@ -6,6 +6,7 @@ import com.ledinhtuyenbkdn.masterpersonindex.service.algorithm.MatchingService;
 import com.ledinhtuyenbkdn.masterpersonindex.service.dto.PersonDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,6 +27,7 @@ public class PersonController {
     }
 
     @PostMapping("/persons")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<PersonDTO> create(@RequestBody @Valid PersonDTO person) {
         if (person.getId() != null) {
             throw new BadRequestException("Id must be null.");
@@ -37,6 +39,7 @@ public class PersonController {
     }
 
     @PutMapping("/persons")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<PersonDTO> update(@RequestBody @Valid PersonDTO person) {
         if (person.getId() == null) {
             throw new BadRequestException("Id must be not null.");
@@ -46,6 +49,7 @@ public class PersonController {
     }
 
     @GetMapping("/persons/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<PersonDTO> findById(@PathVariable("id") Long id) {
         Optional<PersonDTO> optionalPerson = personService.findOne(id);
         if (!optionalPerson.isPresent()) {
@@ -55,11 +59,13 @@ public class PersonController {
     }
 
     @GetMapping("/persons")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<PersonDTO>> findAll() {
         return ResponseEntity.ok(personService.findAll());
     }
 
     @DeleteMapping("/persons/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         personService.delete(id);
         return ResponseEntity.ok().build();

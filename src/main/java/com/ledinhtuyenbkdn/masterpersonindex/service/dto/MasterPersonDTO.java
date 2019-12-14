@@ -1,5 +1,6 @@
 package com.ledinhtuyenbkdn.masterpersonindex.service.dto;
 
+import com.ledinhtuyenbkdn.masterpersonindex.model.Province;
 import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.Gender;
 
 import javax.validation.constraints.NotBlank;
@@ -24,6 +25,8 @@ public class MasterPersonDTO {
     private LocalDate dateOfBirth;
 
     private Gender gender;
+
+    private Province province;
 
     private List<PersonDTO> people;
 
@@ -89,5 +92,13 @@ public class MasterPersonDTO {
 
     public void setPeople(List<PersonDTO> people) {
         this.people = people;
+    }
+
+    public Province getProvince() {
+        return province;
+    }
+
+    public void setProvince(Province province) {
+        this.province = province;
     }
 }

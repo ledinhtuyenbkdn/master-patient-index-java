@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MatchingServiceImpl implements MatchingService {
@@ -50,6 +51,12 @@ public class MatchingServiceImpl implements MatchingService {
     public void match(PersonDTO personDTO) {
         Person person = personMapper.toEntity(personDTO);
 
+        Optional<MasterPerson> masterPersonOptional = masterPersonRepository.findByHealthInsuranceNumberOrIdentificationNumber(person.getHealthInsuranceNumber(), person.getIdentificationNumber());
+        if (masterPersonOptional.isPresent()) {
+            createFastMatchMasterPerson(person, masterPersonOptional.get());
+            return;
+        }
+
         AlgorithmInterface algorithm = AlgorithmFactory.getAlgorithm(AlgorithmFactory.FUZZY_SEARCH);
         List<FieldWeight> fieldWeights = fieldWeightRepository.findAll();
 
@@ -76,6 +83,13 @@ public class MatchingServiceImpl implements MatchingService {
                 linkPerson(person, possibleMatchMasterPerson.get(0), possibleMatchScore.get(0));
             }
         }
+    }
+
+    private void createFastMatchMasterPerson(Person person, MasterPerson masterPerson) {
+        person.setMasterPerson(masterPerson);
+        person.setPersonStatus(PersonStatus.FAST_MATCH);
+        person.setScore(null);
+        personRepository.save(person);
     }
 
     private void linkPerson(Person person, MasterPerson masterPerson, Double score) {

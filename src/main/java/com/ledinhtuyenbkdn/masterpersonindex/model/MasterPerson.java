@@ -5,6 +5,7 @@ import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.Gender;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.util.List;
@@ -19,8 +20,10 @@ public class MasterPerson {
     @NotBlank
     private String fullName;
 
+    @Column(unique = true)
     private String healthInsuranceNumber;
 
+    @Column(unique = true)
     private String identificationNumber;
 
     private String address;
@@ -33,6 +36,10 @@ public class MasterPerson {
     @OneToMany(mappedBy = "masterPerson")
     @JsonIgnore
     private List<Person> people;
+
+    @ManyToOne
+    @NotNull
+    private Province province;
 
     public Long getId() {
         return id;
@@ -96,6 +103,14 @@ public class MasterPerson {
 
     public void setPeople(List<Person> people) {
         this.people = people;
+    }
+
+    public Province getProvince() {
+        return province;
+    }
+
+    public void setProvince(Province province) {
+        this.province = province;
     }
 
     @Override

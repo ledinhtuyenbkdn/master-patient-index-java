@@ -51,6 +51,11 @@ public class BlockingRoundServiceImpl implements BlockingRoundService {
 
     @Override
     public void delete(Long id) {
+        Optional<BlockingRound> blockingRoundOptional = blockingRoundRepository.findById(id);
+        if (!blockingRoundOptional.isPresent()) {
+            throw new RuntimeException("Not found blockingRoundId: " + id);
+        }
+        deleteBlockingFields(blockingRoundOptional.get());
         blockingRoundRepository.deleteById(id);
     }
 
