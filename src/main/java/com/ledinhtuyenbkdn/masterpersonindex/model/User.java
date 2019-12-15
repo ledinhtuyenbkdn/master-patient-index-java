@@ -3,6 +3,7 @@ package com.ledinhtuyenbkdn.masterpersonindex.model;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "mpi_user")
 public class User {
 
     @Id

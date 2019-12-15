@@ -4,6 +4,10 @@ INSERT INTO role(id, role_name) VALUES (2, 'ROLE_USER');
 INSERT INTO health_center(id, address, name) VALUES (1, 'Việt Nam', 'Global Domain');
 INSERT INTO health_center(id, address, name) VALUES (2, 'Hải Châu, Đà Nẵng', 'Bệnh viện Đa khoa Đà Nẵng');
 
+INSERT INTO mpi_user(id, full_name, password, user_name, role_id, health_center_id) VALUES (1, 'admin', '$2a$10$y5B4IoADd24253Ebi6cm/u.m/Pfz4L6HWpL/1rGs.QWac9uQlj/y.', 'admin', 1, 1);
+INSERT INTO mpi_user(id, full_name, password, user_name, role_id, health_center_id) VALUES (2, 'user1', '$2a$10$y5B4IoADd24253Ebi6cm/u.m/Pfz4L6HWpL/1rGs.QWac9uQlj/y.', 'user1', 2, 2);
+INSERT INTO mpi_user(id, full_name, password, user_name, role_id, health_center_id) VALUES (3, 'user2', '$2a$10$y5B4IoADd24253Ebi6cm/u.m/Pfz4L6HWpL/1rGs.QWac9uQlj/y.', 'user2', 2, 2);
+
 INSERT INTO setting(id, description, mpi_key, mpi_value) VALUES (1, 'Thuật toán', 'ALGORITHM', '1');
 INSERT INTO setting(id, description, mpi_key, mpi_value) VALUES (2, 'Điểm manual match', 'MANUAL_MATCH_SCORE', '60');
 INSERT INTO setting(id, description, mpi_key, mpi_value) VALUES (3, 'Điểm auto match', 'AUTO_MATCH_SCORE', '80');
