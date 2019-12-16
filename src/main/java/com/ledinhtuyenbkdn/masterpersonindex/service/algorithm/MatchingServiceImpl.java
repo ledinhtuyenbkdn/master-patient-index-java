@@ -11,6 +11,7 @@ import com.ledinhtuyenbkdn.masterpersonindex.repository.FieldWeightRepository;
 import com.ledinhtuyenbkdn.masterpersonindex.repository.MasterPersonRepository;
 import com.ledinhtuyenbkdn.masterpersonindex.repository.PersonRepository;
 import com.ledinhtuyenbkdn.masterpersonindex.repository.ReviewLinkRepository;
+import com.ledinhtuyenbkdn.masterpersonindex.service.SettingService;
 import com.ledinhtuyenbkdn.masterpersonindex.service.dto.PersonDTO;
 import com.ledinhtuyenbkdn.masterpersonindex.service.mapper.PersonMapper;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,6 @@ import java.util.Optional;
 
 @Service
 public class MatchingServiceImpl implements MatchingService {
-
-    private static final int MANUAL = 60;
-
-    private static final int AUTO = 80;
 
     private BlockingService blockingService;
 
@@ -38,13 +35,16 @@ public class MatchingServiceImpl implements MatchingService {
 
     private PersonMapper personMapper;
 
-    public MatchingServiceImpl(BlockingService blockingService, FieldWeightRepository fieldWeightRepository, PersonRepository personRepository, MasterPersonRepository masterPersonRepository, ReviewLinkRepository reviewLinkRepository, PersonMapper personMapper) {
+    private SettingService settingService;
+
+    public MatchingServiceImpl(BlockingService blockingService, FieldWeightRepository fieldWeightRepository, PersonRepository personRepository, MasterPersonRepository masterPersonRepository, ReviewLinkRepository reviewLinkRepository, PersonMapper personMapper, SettingService settingService) {
         this.blockingService = blockingService;
         this.fieldWeightRepository = fieldWeightRepository;
         this.personRepository = personRepository;
         this.masterPersonRepository = masterPersonRepository;
         this.reviewLinkRepository = reviewLinkRepository;
         this.personMapper = personMapper;
+        this.settingService = settingService;
     }
 
     @Override
@@ -57,7 +57,12 @@ public class MatchingServiceImpl implements MatchingService {
             return;
         }
 
-        AlgorithmInterface algorithm = AlgorithmFactory.getAlgorithm(AlgorithmFactory.FUZZY_SEARCH);
+        int algorithmId = settingService.getSettingValue("ALGORITHM", Integer.class);
+        int manualMatchScore = settingService.getSettingValue("MANUAL_MATCH_SCORE", Integer.class);
+        int autoMatchScore = settingService.getSettingValue("AUTO_MATCH_SCORE", Integer.class);
+
+
+        AlgorithmInterface algorithm = AlgorithmFactory.getAlgorithm(algorithmId);
         List<FieldWeight> fieldWeights = fieldWeightRepository.findAll();
 
         List<MasterPerson> candidates = blockingService.getCandidates(person);
@@ -66,7 +71,7 @@ public class MatchingServiceImpl implements MatchingService {
 
         for (MasterPerson masterPerson : candidates) {
             double score = calculateScore(person, masterPerson, algorithm, fieldWeights);
-            if (score > MANUAL) {
+            if (score > manualMatchScore) {
                 possibleMatchMasterPerson.add(masterPerson);
                 possibleMatchScore.add(score);
             }
@@ -77,7 +82,7 @@ public class MatchingServiceImpl implements MatchingService {
         } else if (possibleMatchMasterPerson.size() > 1) {
             createReviewLinks(person, possibleMatchMasterPerson, possibleMatchScore);
         } else {
-            if (possibleMatchScore.get(0) < AUTO) {
+            if (possibleMatchScore.get(0) < autoMatchScore) {
                 createReviewLinks(person, possibleMatchMasterPerson, possibleMatchScore);
             } else {
                 linkPerson(person, possibleMatchMasterPerson.get(0), possibleMatchScore.get(0));
