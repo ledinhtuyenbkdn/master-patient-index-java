@@ -1,9 +1,6 @@
 package com.ledinhtuyenbkdn.masterpersonindex.service.algorithm;
 
-import com.ledinhtuyenbkdn.masterpersonindex.model.FieldWeight;
-import com.ledinhtuyenbkdn.masterpersonindex.model.MasterPerson;
-import com.ledinhtuyenbkdn.masterpersonindex.model.Person;
-import com.ledinhtuyenbkdn.masterpersonindex.model.ReviewLink;
+import com.ledinhtuyenbkdn.masterpersonindex.model.*;
 import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.Field;
 import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.LinkStatus;
 import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.PersonStatus;
@@ -11,16 +8,19 @@ import com.ledinhtuyenbkdn.masterpersonindex.repository.FieldWeightRepository;
 import com.ledinhtuyenbkdn.masterpersonindex.repository.MasterPersonRepository;
 import com.ledinhtuyenbkdn.masterpersonindex.repository.PersonRepository;
 import com.ledinhtuyenbkdn.masterpersonindex.repository.ReviewLinkRepository;
+import com.ledinhtuyenbkdn.masterpersonindex.service.ProvinceService;
 import com.ledinhtuyenbkdn.masterpersonindex.service.SettingService;
 import com.ledinhtuyenbkdn.masterpersonindex.service.dto.PersonDTO;
 import com.ledinhtuyenbkdn.masterpersonindex.service.mapper.PersonMapper;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class MatchingServiceImpl implements MatchingService {
 
     private BlockingService blockingService;
@@ -37,7 +37,11 @@ public class MatchingServiceImpl implements MatchingService {
 
     private SettingService settingService;
 
-    public MatchingServiceImpl(BlockingService blockingService, FieldWeightRepository fieldWeightRepository, PersonRepository personRepository, MasterPersonRepository masterPersonRepository, ReviewLinkRepository reviewLinkRepository, PersonMapper personMapper, SettingService settingService) {
+    private GenerateGlobalIdService generateGlobalIdService;
+
+    private ProvinceService provinceService;
+
+    public MatchingServiceImpl(BlockingService blockingService, FieldWeightRepository fieldWeightRepository, PersonRepository personRepository, MasterPersonRepository masterPersonRepository, ReviewLinkRepository reviewLinkRepository, PersonMapper personMapper, SettingService settingService, GenerateGlobalIdService generateGlobalIdService, ProvinceService provinceService) {
         this.blockingService = blockingService;
         this.fieldWeightRepository = fieldWeightRepository;
         this.personRepository = personRepository;
@@ -45,24 +49,43 @@ public class MatchingServiceImpl implements MatchingService {
         this.reviewLinkRepository = reviewLinkRepository;
         this.personMapper = personMapper;
         this.settingService = settingService;
+        this.generateGlobalIdService = generateGlobalIdService;
+        this.provinceService = provinceService;
     }
 
     @Override
     public void match(PersonDTO personDTO) {
         Person person = personMapper.toEntity(personDTO);
 
-        Optional<MasterPerson> masterPersonOptional = masterPersonRepository.findByHealthInsuranceNumberOrIdentificationNumber(person.getHealthInsuranceNumber(), person.getIdentificationNumber());
-        if (masterPersonOptional.isPresent()) {
-            createFastMatchMasterPerson(person, masterPersonOptional.get());
-            return;
+        if (personDTO.getProvince() != null) {
+            Optional<Province> provinceOptional = provinceService.findOne(personDTO.getProvince().getId());
+            if (provinceOptional.isPresent()) {
+                person.setProvince(provinceOptional.get());
+            }
         }
 
-        int algorithmId = settingService.getSettingValue("ALGORITHM", Integer.class);
-        int manualMatchScore = settingService.getSettingValue("MANUAL_MATCH_SCORE", Integer.class);
-        int autoMatchScore = settingService.getSettingValue("AUTO_MATCH_SCORE", Integer.class);
+        if (person.getHealthInsuranceNumber() != null && !"".equals(person.getHealthInsuranceNumber())) {
+            Optional<MasterPerson> masterPersonOptional = masterPersonRepository.findByHealthInsuranceNumber(person.getHealthInsuranceNumber());
+            if (masterPersonOptional.isPresent()) {
+                createFastMatchMasterPerson(person, masterPersonOptional.get());
+                return;
+            }
+        }
+
+        if (person.getIdentificationNumber() != null && !"".equals(person.getIdentificationNumber())) {
+            Optional<MasterPerson> masterPersonOptional = masterPersonRepository.findByIdentificationNumber(person.getIdentificationNumber());
+            if (masterPersonOptional.isPresent()) {
+                createFastMatchMasterPerson(person, masterPersonOptional.get());
+                return;
+            }
+        }
 
 
-        AlgorithmInterface algorithm = AlgorithmFactory.getAlgorithm(algorithmId);
+        long algorithmId = settingService.getSettingValue("ALGORITHM", Long.class);
+        long manualMatchScore = settingService.getSettingValue("MANUAL_MATCH_SCORE", Long.class);
+        long autoMatchScore = settingService.getSettingValue("AUTO_MATCH_SCORE", Long.class);
+
+        AlgorithmInterface algorithm = AlgorithmFactory.getAlgorithm((int) algorithmId);
         List<FieldWeight> fieldWeights = fieldWeightRepository.findAll();
 
         List<MasterPerson> candidates = blockingService.getCandidates(person);
@@ -123,13 +146,14 @@ public class MatchingServiceImpl implements MatchingService {
     private void createNewMasterPerson(Person person) {
         MasterPerson masterPerson = new MasterPerson();
 
+        masterPerson.setGlobalId(generateGlobalIdService.generate(person));
         masterPerson.setFullName(person.getFullName());
         masterPerson.setHealthInsuranceNumber(person.getHealthInsuranceNumber());
         masterPerson.setIdentificationNumber(person.getIdentificationNumber());
         masterPerson.setDateOfBirth(person.getDateOfBirth());
         masterPerson.setAddress(person.getAddress());
         masterPerson.setGender(person.getGender());
-
+        masterPerson.setProvince(person.getProvince());
         masterPerson = masterPersonRepository.save(masterPerson);
 
         person.setMasterPerson(masterPerson);

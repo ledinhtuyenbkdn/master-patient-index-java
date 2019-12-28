@@ -12,6 +12,8 @@ public class MasterPersonDTO {
 
     private Long id;
 
+    private String globalId;
+
     @NotBlank
     private String fullName;
 
@@ -100,5 +102,13 @@ public class MasterPersonDTO {
 
     public void setProvince(Province province) {
         this.province = province;
+    }
+
+    public String getGlobalId() {
+        return globalId;
+    }
+
+    public void setGlobalId(String globalId) {
+        this.globalId = globalId;
     }
 }

@@ -5,7 +5,6 @@ import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.Gender;
 import com.ledinhtuyenbkdn.masterpersonindex.model.enumeration.PersonStatus;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
@@ -38,7 +37,6 @@ public class PersonDTO {
 
     private HealthCenterDTO healthCenter;
 
-    @NotNull
     private Province province;
 
     private Long masterPersonId;

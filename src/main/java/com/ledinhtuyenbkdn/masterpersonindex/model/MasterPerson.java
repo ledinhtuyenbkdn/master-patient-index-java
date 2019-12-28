@@ -17,6 +17,8 @@ public class MasterPerson {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String globalId;
+
     @NotBlank
     private String fullName;
 
@@ -111,6 +113,14 @@ public class MasterPerson {
 
     public void setProvince(Province province) {
         this.province = province;
+    }
+
+    public String getGlobalId() {
+        return globalId;
+    }
+
+    public void setGlobalId(String globalId) {
+        this.globalId = globalId;
     }
 
     @Override
