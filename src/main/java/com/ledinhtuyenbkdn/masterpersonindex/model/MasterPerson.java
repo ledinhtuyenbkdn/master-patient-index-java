@@ -40,7 +40,6 @@ public class MasterPerson {
     private List<Person> people;
 
     @ManyToOne
-    @NotNull
     private Province province;
 
     public Long getId() {

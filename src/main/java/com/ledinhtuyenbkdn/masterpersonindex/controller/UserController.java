@@ -3,6 +3,7 @@ package com.ledinhtuyenbkdn.masterpersonindex.controller;
 import com.ledinhtuyenbkdn.masterpersonindex.exception.BadRequestException;
 import com.ledinhtuyenbkdn.masterpersonindex.model.User;
 import com.ledinhtuyenbkdn.masterpersonindex.service.UserService;
+import com.ledinhtuyenbkdn.masterpersonindex.service.dto.UserDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,12 +25,12 @@ public class UserController {
 
     @PostMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<User> create(@RequestBody @Valid User user) {
-        if (user.getId() != null) {
+    public ResponseEntity<UserDTO> create(@RequestBody @Valid UserDTO userDTO) {
+        if (userDTO.getId() != null) {
             throw new BadRequestException("Id must be null.");
         }
-        user = userService.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        userDTO = userService.save(userDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 
 //    @PutMapping("/health-centers")
@@ -53,7 +54,7 @@ public class UserController {
 
     @GetMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<User>> findAll() {
+    public ResponseEntity<List<UserDTO>> findAll() {
         return ResponseEntity.ok(userService.findAll());
     }
 
